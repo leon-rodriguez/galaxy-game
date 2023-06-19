@@ -11,6 +11,7 @@ class NavePrincipal(Nave):
         self.imagen_corazon = imagen_corazon
         self.imagen_corazon_vacio = imagen_corazon_vacio
         self.vidas_inicial = self.vidas
+        self.poder_recibir_disparos = True
 
     def moverAriiba(self):
         if self.y > 0:

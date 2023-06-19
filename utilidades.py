@@ -1,4 +1,6 @@
 from constantes import *
+from naveEnemiga import NaveEnemiga
+from random import randint
 # from main import *
 
 
@@ -9,41 +11,53 @@ def setear_personaje(NavePrincipal):
 
 
 def setear_personaje_enemigo(NaveEnemiga):
-    enemigo = NaveEnemiga(NAVE_E["vida"], NAVE_E["daño"], NAVE_E["velocidad"],
-                          NAVE_E["velocidadTiro"], NAVE_E["imagen"], NAVE_E["imagen_disparo"], NAVE_E["x"], NAVE_E["y"], NAVE["modificador_h"], NAVE_E["moviendose"], NAVE_E["coordenada_x_final"], NAVE_E["coordenada_y_final"])
+    coordenada_x = ANCHO_VENTANA + NAVES_E[4]["imagen"].get_width() + 20
+    coordenada_y = randint(0, LARGO_VENTANA -
+                           NAVES_E[4]["imagen"].get_height())
+    enemigo = NaveEnemiga(NAVES_E[4]["vida"], NAVES_E[4]["daño"], NAVES_E[4]["velocidad"],
+                          NAVES_E[4]["velocidadTiro"], NAVES_E[4]["imagen"], NAVES_E[4]["imagen_disparo"], coordenada_x, coordenada_y, NAVE["modificador_h"], NAVES_E[4]["moviendose"], ANCHO_VENTANA - NAVES_E[4]["imagen"].get_height(),  coordenada_y)
     return enemigo
 
 
-def manejar_disparos(lista_disparos: list, pantalla, lista_enemigos: list, personajePrincipal, puntaje, NaveEnemiga, fuente):
-    for item in lista_disparos:
+def manejar_disparos(pantalla, entorno, tiempo_actual):
+    for item in entorno.lista_disparos:
         item.mover()
         item.dibujar(pantalla)
         if item.checkear_visibilidad(ANCHO_VENTANA) == False:
-            lista_disparos.remove(item)
+            entorno.lista_disparos.remove(item)
         flag = True
-        for enemigo in lista_enemigos:
+        for enemigo in entorno.lista_enemigos:
 
             if enemigo.comprobar_colision(item.rect) and flag and item.es_enemigo == False:
-                lista_disparos.remove(item)
-                enemigo.restar_vida(personajePrincipal.daño)
+                try:
+                    entorno.lista_disparos.remove(item)
+                except ValueError:
+                    print("ahi fallo")
+                enemigo.restar_vida(entorno.personajePrincipal.daño)
                 enemigo.actualizar_rectangulo_vida(pantalla)
                 flag = False
                 if enemigo.vida < 1:
-                    lista_enemigos.remove(enemigo)
-                    lista_enemigos.append(NaveEnemiga(NAVE_E["vida"], NAVE_E["daño"], NAVE_E["velocidad"],
-                                                      NAVE_E["velocidadTiro"], NAVE_E["imagen"], NAVE_E["imagen_disparo"], NAVE_E["x"], NAVE_E["y"], NAVE["modificador_h"], NAVE_E["moviendose"], NAVE_E["coordenada_x_final"], NAVE_E["coordenada_y_final"]))
-                    puntaje.sumar_bonus_enemigo()
-                    puntaje.actualizar_texto(fuente)
+                    entorno.lista_enemigos.remove(enemigo)
+                    nuevo_enemigo = randint(0, len(NAVES_E) - 1)
+                    coordenada_x = ANCHO_VENTANA + \
+                        NAVES_E[nuevo_enemigo]["imagen"].get_width() + 20
+                    coordenada_y = randint(0, LARGO_VENTANA -
+                                           NAVES_E[nuevo_enemigo]["imagen"].get_height())
+                    nueva_nave_enemiga = NaveEnemiga(NAVES_E[nuevo_enemigo]["vida"], NAVES_E[nuevo_enemigo]["daño"], NAVES_E[nuevo_enemigo]["velocidad"],
+                                                     NAVES_E[nuevo_enemigo]["velocidadTiro"], NAVES_E[nuevo_enemigo]["imagen"], NAVES_E[nuevo_enemigo]["imagen_disparo"], coordenada_x, coordenada_y, NAVE["modificador_h"], NAVES_E[nuevo_enemigo]["moviendose"], ANCHO_VENTANA - NAVES_E[nuevo_enemigo]["imagen"].get_height(),  coordenada_y)
+                    entorno.lista_enemigos.append(nueva_nave_enemiga)
+                    entorno.puntaje.sumar_bonus_enemigo()
+                    entorno.puntaje.actualizar_texto(entorno.fuente)
 
-        if personajePrincipal.comprobar_colision(item.rect) and item.es_enemigo == True:
-            personajePrincipal.restar_vidas()
+        if entorno.personajePrincipal.comprobar_colision(item.rect) and item.es_enemigo == True and entorno.contadores.poder_recibir_disparos == True:
+            entorno.contadores.no_recibir_disparos(tiempo_actual, 2000)
+            if entorno.personajePrincipal.vidas > 1:
+                entorno.sonido_disparo_recibido.play()
+            entorno.personajePrincipal.restar_vidas()
             try:
-                lista_disparos.remove(item)
+                entorno.lista_disparos.remove(item)
             except ValueError:
                 print("ahi fallo")
-            if personajePrincipal.vida < 1:
-                personajePrincipal.x = 0
-                # personajePrincipal.y = 100
 
 
 def manejar_moviimento_enemigos(lista_enemigos: list, pantalla):

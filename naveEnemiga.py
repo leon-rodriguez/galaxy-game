@@ -3,12 +3,9 @@ from constantes import MOVIMIENTO_ENEMIGO
 import random
 from nave import Nave
 
-nave_enemigo_basico = pg.image.load("galaxian/images/enemigo_basico.png")
-nave_enemigo_basico = pg.transform.rotate(nave_enemigo_basico, 90)
-
-disparo_enemigo_basico = pg.image.load(
-    "galaxian/images/disparo_enemigo_basico.png")
-disparo_enemigo_basico = pg.transform.rotate(disparo_enemigo_basico, 90)
+# disparo_enemigo_basico = pg.image.load(
+#     "galaxian/images/disparo_enemigo_basico.png")
+# disparo_enemigo_basico = pg.transform.rotate(disparo_enemigo_basico, 90)
 
 
 class NaveEnemiga(Nave):

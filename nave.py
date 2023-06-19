@@ -1,15 +1,15 @@
 import pygame as pg
 from constantes import MOVIMIENTO_PERSONAJE
 
-nave_personaje_principal = pg.image.load(
-    "galaxian/images/personaje_principal.png")
-nave_personaje_principal = pg.transform.rotate(nave_personaje_principal, -90)
+# nave_personaje_principal = pg.image.load(
+#     "galaxian/images/personaje_principal.png")
+# nave_personaje_principal = pg.transform.rotate(nave_personaje_principal, -90)
 
-disparo_personaje_principal = pg.image.load(
-    "galaxian/images/disparo_personaje_principal.png")
-# naves = getSuperficie("galaxian/images/sprites.png", 12, 2)
-disparo_personaje_principal = pg.transform.rotate(
-    disparo_personaje_principal, -90)
+# disparo_personaje_principal = pg.image.load(
+#     "galaxian/images/disparos/disparo_personaje_principal.png")
+# # naves = getSuperficie("galaxian/images/sprites.png", 12, 2)
+# disparo_personaje_principal = pg.transform.rotate(
+#     disparo_personaje_principal, -90)
 
 
 class Nave:

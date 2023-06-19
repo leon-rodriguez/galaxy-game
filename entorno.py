@@ -24,6 +24,11 @@ class Entorno:
         self.texto_usuario = ""
         self.flag_estado_juego = ESTADO_INICIAL
         self.flag_correr = True
+        self.sonido_boton_start = pg.mixer.Sound("galaxian/sounds/inicio.wav")
+        self.sonido_muerte = pg.mixer.Sound("galaxian/sounds/muerte.wav")
+        self.sonido_disparo = pg.mixer.Sound("galaxian/sounds/disparo.wav")
+        self.sonido_disparo_recibido = pg.mixer.Sound(
+            "galaxian/sounds/disparo_recibido.wav")
 
     def inicializar_juego(self):
         self.lista_enemigos.append(self.primer_enemigo)
@@ -62,6 +67,7 @@ class Entorno:
                     self.texto_usuario += evento.unicode
             if evento.type == pg.MOUSEBUTTONDOWN:
                 if rect_boton_start.collidepoint(evento.pos) and len(self.texto_usuario) > 0:
+                    self.sonido_boton_start.play()
                     self.flag_estado_juego = ESTADO_JUGANDO
 
         input_texto = pg.Rect((ANCHO_VENTANA / 2) - (240) / 2, 400, 240, 70)
@@ -70,18 +76,24 @@ class Entorno:
         texto_a_mostrar = self.fuente.render(
             self.texto_usuario, True, (255, 255, 255))
 
+        pg.draw.rect(pantalla, (0, 0, 0), input_texto)
+        pg.draw.rect(pantalla, BLANCO, input_texto, 2)
+
         pantalla.blit(titulo_imagen, ((ANCHO_VENTANA / 2) -
                                       (titulo_imagen.get_width() / 2), 30))
         pantalla.blit(boton_start, ((ANCHO_VENTANA / 2) -
                                     (boton_start.get_width() / 2), 620))
         pantalla.blit(texto_a_mostrar,
                       (input_texto.x + 10, input_texto.y + 15))
-        pg.draw.rect(pantalla, (255, 255, 255), input_texto, 2)
 
     def correr_juego(self, pantalla, baseDeDatos, background):
         current_time = pg.time.get_ticks()
         # TODO pasar entorno a clase ciclos
         self.contadores.ciclos(current_time, self.puntaje, self.fuente)
+
+        # pg.mixer.music.load(
+        # "galaxian/sounds/musica_de_fondo.wav")
+        # pg.mixer.music.play(1)
 
         lista_eventos = pg.event.get()
         for evento in lista_eventos:
@@ -89,6 +101,7 @@ class Entorno:
                 self.flag_correr = False
             if evento.type == pg.KEYDOWN:
                 if evento.key == pg.K_SPACE and self.contadores.poder_disparar == True:
+                    self.sonido_disparo.play()
                     disparo = Disparo(self.personajePrincipal.x, self.personajePrincipal.y,
                                       False, self.personajePrincipal.imagen_disparo)
                     self.lista_disparos.append(disparo)
@@ -102,10 +115,10 @@ class Entorno:
 
         manejar_teclas(pg, self.personajePrincipal)
 
-        manejar_disparos(self.lista_disparos, pantalla, self.lista_enemigos,
-                         self.personajePrincipal, self.puntaje, NaveEnemiga, self.fuente)
+        manejar_disparos(pantalla, self, current_time)
 
         self.personajePrincipal.dibujar_corazones(pantalla)
+
         self.personajePrincipal.dibujar(pantalla)
 
         for item in self.lista_enemigos:
@@ -115,8 +128,12 @@ class Entorno:
         self.puntaje.dibujar_texto(pantalla)
 
         if self.personajePrincipal.vidas == 0:
+            self.sonido_muerte.play()
+            # self.contadores.delay_para_musica(
+            # current_time, self.sonido_muerte.get_length() * 1000)
             baseDeDatos.insertar_puntajes(
                 self.texto_usuario, self.puntaje.puntuacion)
+            # if self.contadores.seguir_ejecucion == True:
             self.flag_estado_juego = ESTADO_FINAL
 
     def correr_final(self, pantalla, baseDeDatos):
@@ -133,6 +150,8 @@ class Entorno:
                 self.flag_correr = False
             if evento.type == pg.MOUSEBUTTONDOWN:
                 if rect_boton_start.collidepoint(evento.pos):
+                    self.sonido_boton_start.play()
+                    print(self.sonido_boton_start.get_length())
                     self.resetear_juego()
 
         pantalla.fill((0, 0, 0))

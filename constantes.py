@@ -15,20 +15,34 @@ ESTADO_JUGANDO = 2
 ESTADO_FINAL = 3
 
 nave_principal_imagen = pg.image.load(
-    "galaxian/images/personaje_principal.png")
+    "galaxian/images/naves/personaje_principal.png")
 nave_principal_imagen = pg.transform.rotate(nave_principal_imagen, -90)
 
 disparo_principal_imagen = pg.image.load(
-    "galaxian/images/disparo_personaje_principal.png")
+    "galaxian/images/disparos/disparo_personaje_principal.png")
 disparo_principal_imagen = pg.transform.rotate(disparo_principal_imagen, -90)
 
-nave_enemiga = pg.image.load(
-    "galaxian/images/enemigo_basico.png")
-nave_enemiga = pg.transform.rotate(nave_enemiga, 90)
+# nave_enemiga = pg.image.load(
+#     "galaxian/images/naves/enemigo_basico.png")
+# nave_enemiga = pg.transform.rotate(nave_enemiga, 90)
 
-disparo_enemigo_imagen = pg.image.load(
-    "galaxian/images/disparo_enemigo_basico.png")
-disparo_enemigo_imagen = pg.transform.rotate(disparo_enemigo_imagen, 90)
+# disparo_enemigo_imagen = pg.image.load(
+#     "galaxian/images/disparos/disparo_enemigo_basico.png")
+# disparo_enemigo_imagen = pg.transform.rotate(disparo_enemigo_imagen, 90)
+
+
+def imagen_nave_enemiga(path):
+    nave_enemiga = pg.image.load(
+        path)
+    nave_enemiga = pg.transform.rotate(nave_enemiga, 90)
+    return nave_enemiga
+
+
+def imagen_disparo_enemigo(path):
+    disparo_enemigo = pg.image.load(
+        path)
+    disparo_enemigo = pg.transform.rotate(disparo_enemigo, -90)
+    return disparo_enemigo
 
 
 corazon = pg.image.load(
@@ -50,22 +64,100 @@ NAVE = {
     "imagen_corazon": corazon,
     "imagen_corazon_vacio": corazon_vacio,
     "x": 0,
-    "y": 0,
-    "modificador_h": -20,
+    "y": LARGO_VENTANA / 2,
+    "modificador_h": -40,
     "vidas": 5
 }
 
-NAVE_E = {
-    "vida": 3,
-    "daño": 10,
-    "velocidad": 1,
-    "velocidadTiro": 500,
-    "imagen": nave_enemiga,
-    "imagen_disparo": disparo_enemigo_imagen,
-    "x": 900,
-    "y": 700,
-    "modificador_h": 20,
-    "moviendose": False,
-    "coordenada_x_final": 0,
-    "coordenada_y_final": 0,
-}
+NAVES_E = [
+    # ENEMIGO BASICO
+    {
+        "vida": 3,
+        "daño": 10,
+        "velocidad": 1,
+        "velocidadTiro": 1100,
+        "imagen": imagen_nave_enemiga("galaxian/images/naves/enemigo_basico.png"),
+        "imagen_disparo": imagen_disparo_enemigo("galaxian/images/disparos/disparo_enemigo_basico.png"),
+        "x": 900,
+        "y": 700,
+        "modificador_h": 20,
+        "moviendose": True,
+        "coordenada_x_final": 0,
+        "coordenada_y_final": 0,
+    },
+    # NAVE 3
+    {
+        "vida": 4,
+        "daño": 10,
+        "velocidad": 1,
+        "velocidadTiro": 1600,
+        "imagen": imagen_nave_enemiga("galaxian/images/naves/nave3.png"),
+        "imagen_disparo": imagen_disparo_enemigo("galaxian/images/disparos/disparo_nave3.png"),
+        "x": 900,
+        "y": 700,
+        "modificador_h": 20,
+        "moviendose": True,
+        "coordenada_x_final": 0,
+        "coordenada_y_final": 0,
+    },
+    # NAVE 4
+    {
+        "vida": 2,
+        "daño": 10,
+        "velocidad": 1,
+        "velocidadTiro": 2500,
+        "imagen": imagen_nave_enemiga("galaxian/images/naves/nave4.png"),
+        "imagen_disparo": imagen_disparo_enemigo("galaxian/images/disparos/disparo_nave4.png"),
+        "x": 900,
+        "y": 700,
+        "modificador_h": 20,
+        "moviendose": True,
+        "coordenada_x_final": 0,
+        "coordenada_y_final": 0,
+    },
+    # NAVE 5
+    {
+        "vida": 4,
+        "daño": 10,
+        "velocidad": 1,
+        "velocidadTiro": 2200,
+        "imagen": imagen_nave_enemiga("galaxian/images/naves/nave5.png"),
+        "imagen_disparo": imagen_disparo_enemigo("galaxian/images/disparos/disparo_nave5.png"),
+        "x": 900,
+        "y": 700,
+        "modificador_h": 20,
+        "moviendose": True,
+        "coordenada_x_final": 0,
+        "coordenada_y_final": 0,
+    },
+    # NAVE 7
+    {
+        "vida": 2,
+        "daño": 10,
+        "velocidad": 1,
+        "velocidadTiro": 1000,
+        "imagen": imagen_nave_enemiga("galaxian/images/naves/nave7.png"),
+        "imagen_disparo": imagen_disparo_enemigo("galaxian/images/disparos/disparo_nave7.png"),
+        "x": 900,
+        "y": 700,
+        "modificador_h": 20,
+        "moviendose": True,
+        "coordenada_x_final": 0,
+        "coordenada_y_final": 0,
+    },
+    # NAVE 11
+    {
+        "vida": 6,
+        "daño": 10,
+        "velocidad": 1,
+        "velocidadTiro": 4000,
+        "imagen": imagen_nave_enemiga("galaxian/images/naves/nave11.png"),
+        "imagen_disparo": imagen_disparo_enemigo("galaxian/images/disparos/disparo_nave11.png"),
+        "x": 900,
+        "y": 700,
+        "modificador_h": 20,
+        "moviendose": True,
+        "coordenada_x_final": 0,
+        "coordenada_y_final": 0,
+    },
+]
