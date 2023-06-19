@@ -10,6 +10,9 @@ FPS = 60
 ANCHO_TABLA = 500
 ALTO_FILA = 60
 MITAD_PANTALLA = ANCHO_VENTANA / 2
+ESTADO_INICIAL = 1
+ESTADO_JUGANDO = 2
+ESTADO_FINAL = 3
 
 nave_principal_imagen = pg.image.load(
     "galaxian/images/personaje_principal.png")
