@@ -1,10 +1,11 @@
 import sqlite3
 
 
-class BaseDeDatos:
+class BaseDeDatos:  # clase que representa la base de datos
     def __init__(self) -> None:
         pass
 
+    # este metodo crea la tabla puntajes con columnas de id, usuario y puntaje
     def crear_tabla(self):
         with sqlite3.connect("bd_puntajes.db") as conexion:
             try:
@@ -20,6 +21,7 @@ class BaseDeDatos:
             except sqlite3.OperationalError:
                 print("La tabla personajes ya existe")
 
+    # este metodo inserta a la tabla el puntaje del usuario y su nombre
     def insertar_puntajes(self, usuario, puntaje):
         with sqlite3.connect("bd_puntajes.db") as conexion:
             try:
@@ -28,6 +30,7 @@ class BaseDeDatos:
             except:
                 print("error")
 
+    # este metodo retorna la tabla ordenada cuando se lo ejecuta
     def devolver_tabla_ordenada(self) -> list:
         tabla_ordenada = []
         with sqlite3.connect("bd_puntajes.db") as conexion:

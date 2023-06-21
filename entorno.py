@@ -7,6 +7,8 @@ from naveEnemiga import NaveEnemiga
 from disapro import Disparo
 from constantes import *
 
+# en esta clase se definen propiedades que son accedidas y modificadas por muchas funciones
+
 
 class Entorno:
     def __init__(self) -> None:
@@ -30,11 +32,13 @@ class Entorno:
         self.sonido_disparo_recibido = pg.mixer.Sound(
             "galaxian/sounds/disparo_recibido.wav")
 
+    # el juego empieza agregando los tres primeros enemigos
     def inicializar_juego(self):
         self.lista_enemigos.append(self.primer_enemigo)
         self.lista_enemigos.append(self.segundo_enemigo)
         self.lista_enemigos.append(self.tercer_enemigo)
 
+    # cuando se vuelve a jugar se ejecuta esta funcion que resetea todas las variables y clases necesarias
     def resetear_juego(self):
         self.lista_disparos = []
         self.lista_enemigos = []
@@ -50,6 +54,7 @@ class Entorno:
         self.flag_correr = True
         self.inicializar_juego()
 
+    # esta funcion ejecuta la primera pantalla, que toma el nombre del usuario
     def correr_inicio(self, pantalla):
         boton_start = pg.image.load("galaxian/images/boton_start.png")
         boton_start = pg.transform.scale(boton_start, (260, 120))
@@ -86,15 +91,11 @@ class Entorno:
         pantalla.blit(texto_a_mostrar,
                       (input_texto.x + 10, input_texto.y + 15))
 
+    # esta funcion corre el juego
     def correr_juego(self, pantalla, baseDeDatos, background):
         current_time = pg.time.get_ticks()
         # TODO pasar entorno a clase ciclos
         self.contadores.ciclos(current_time, self.puntaje, self.fuente)
-
-        # pg.mixer.music.load(
-        # "galaxian/sounds/musica_de_fondo.wav")
-        # pg.mixer.music.play(1)
-
         lista_eventos = pg.event.get()
         for evento in lista_eventos:
             if evento.type == pg.QUIT:
@@ -124,18 +125,15 @@ class Entorno:
         for item in self.lista_enemigos:
             item.dibujar(pantalla)
 
-        # print(self.puntaje.puntuacion)
         self.puntaje.dibujar_texto(pantalla)
 
         if self.personajePrincipal.vidas == 0:
             self.sonido_muerte.play()
-            # self.contadores.delay_para_musica(
-            # current_time, self.sonido_muerte.get_length() * 1000)
             baseDeDatos.insertar_puntajes(
                 self.texto_usuario, self.puntaje.puntuacion)
-            # if self.contadores.seguir_ejecucion == True:
             self.flag_estado_juego = ESTADO_FINAL
 
+    # en esta funcion se muestran los puntajes y da la opcion de volver a jugar
     def correr_final(self, pantalla, baseDeDatos):
         # renderizar boton
         boton_start = pg.image.load("galaxian/images/boton_start.png")

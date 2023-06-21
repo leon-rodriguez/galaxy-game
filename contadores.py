@@ -2,10 +2,9 @@ import math
 from disapro import Disparo
 
 
-class Contadores:
+class Contadores:  # clase con la que se manejan todos los contadores del juego
     def __init__(self, lista_disparos, personajePrincipal, lista_enemigos):
-        self.secconds = 0
-        self.half_secconds = 0
+        self.segundos = 0
         self.tiempo_enemigo1 = 0
         self.tiempo_enemigo2 = 0
         self.tiempo_enemigo3 = 0
@@ -19,67 +18,53 @@ class Contadores:
         self.poder_recibir_disparos = True
         self.delay_recibir_disparos = 0
 
+    # eb este ciclo de un segundo se suman puntajes y actualiza el texto
     def ciclo_segundos(self, puntaje, fuentes):
-        self.secconds
-        # for item in self.lista_enemigos:
-        #     disparo_enemigo = Disparo(
-        #         item.x, item.y, True, item.imagen_disparo)
-        #     self.lista_disparos.append(disparo_enemigo)
+        self.segundos
         puntaje.sumar_bonus_tiempo()
         print(puntaje.puntuacion)
         puntaje.actualizar_texto(fuentes)
 
-    def ciclo_500_ms(self):
-        self.half_secconds
-        disparo = Disparo(self.personajePrincipal.x, self.personajePrincipal.y,
-                          False, self.personajePrincipal.imagen_disparo)
-        self.lista_disparos.append(disparo)
-
+    # se sete el cooldown de disparo cada vez que el personaje principal dispara
     def cooldown_disparos(self, tiempo_actual, cooldown_de_nave_principal):
         self.cooldown_nave_principal = tiempo_actual + cooldown_de_nave_principal
         self.poder_disparar = False
 
-    def delay_para_musica(self, tiempo_actual, tiempo_a_esperar):
-        self.delay_musica = tiempo_actual + tiempo_a_esperar
-        self.seguir_ejecucion = False
-
+    # se sete el cooldown de recibir disparo cada vez que el personaje principal recibe un disparo
     def no_recibir_disparos(self, tiempo_actual, tiempo_a_esperar):
         self.delay_recibir_disparos = tiempo_actual + tiempo_a_esperar
         self.poder_recibir_disparos = False
 
-    def disparo_enemigo1(self):
+    def disparo_enemigo1(self):  # se maneja los tiempos de disparo de el enemigo 1
         enemigo1 = self.lista_enemigos[0]
         disparo_enemigo = Disparo(
             enemigo1.x, enemigo1.y, True, enemigo1.imagen_disparo)
         self.lista_disparos.append(disparo_enemigo)
 
-    def disparo_enemigo2(self):
+    def disparo_enemigo2(self):  # se maneja los tiempos de disparo de el enemigo 2
         enemigo2 = self.lista_enemigos[1]
         disparo_enemigo = Disparo(
             enemigo2.x, enemigo2.y, True, enemigo2.imagen_disparo)
         self.lista_disparos.append(disparo_enemigo)
 
-    def disparo_enemigo3(self):
+    def disparo_enemigo3(self):  # se maneja los tiempos de disparo de el enemigo 3
         enemigo3 = self.lista_enemigos[2]
         disparo_enemigo = Disparo(
             enemigo3.x, enemigo3.y, True, enemigo3.imagen_disparo)
         self.lista_disparos.append(disparo_enemigo)
 
-    def ciclos(self, cicle, puntaje, fuentes):
-        secconds_value = math.floor(cicle / 1000)
-        ml_500_value = math.floor(cicle / 500)
+    def ciclos(self, ciclo, puntaje, fuentes):  # aca se manejan en tiempo todos los ciclos
+        segundos_value = math.floor(ciclo / 1000)
         enemigo1_value = math.floor(
-            cicle / self.lista_enemigos[0].velocidad_tiro)
+            ciclo / self.lista_enemigos[0].velocidad_tiro)
         enemigo2_value = math.floor(
-            cicle / self.lista_enemigos[1].velocidad_tiro)
+            ciclo / self.lista_enemigos[1].velocidad_tiro)
         enemigo3_value = math.floor(
-            cicle / self.lista_enemigos[2].velocidad_tiro)
-        if secconds_value != self.secconds:
-            self.secconds = secconds_value
+            ciclo / self.lista_enemigos[2].velocidad_tiro)
+
+        if segundos_value != self.segundos:
+            self.segundos = segundos_value
             self.ciclo_segundos(puntaje, fuentes)
-        # if ml_500_value != self.half_secconds:
-            # self.half_secconds = ml_500_value
-            # self.ciclo_800_ms()
         if enemigo1_value != self.tiempo_enemigo1:
             self.tiempo_enemigo1 = enemigo1_value
             self.disparo_enemigo1()
@@ -92,16 +77,16 @@ class Contadores:
             self.tiempo_enemigo3 = enemigo3_value
             self.disparo_enemigo3()
 
-        if cicle >= self.cooldown_nave_principal:
+        if ciclo >= self.cooldown_nave_principal:
             self.poder_disparar = True
-        if cicle >= self.delay_musica:
+        if ciclo >= self.delay_musica:
             self.seguir_ejecucion = True
-        if cicle >= self.delay_recibir_disparos:
+        if ciclo >= self.delay_recibir_disparos:
             self.poder_recibir_disparos = True
 
+    # este metodo se usa para resetear los contadores cuando se quiere volver a jugar
     def resetear_contadores(self, lista_disparos, personajePrincipal, lista_enemigos):
-        self.secconds = 0
-        self.half_secconds = 0
+        self.segundos = 0
         self.lista_disparos = lista_disparos
         self.personajePrincipal = personajePrincipal
         self.lista_enemigos = lista_enemigos

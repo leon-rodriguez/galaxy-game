@@ -1,15 +1,15 @@
 from constantes import *
 from naveEnemiga import NaveEnemiga
 from random import randint
-# from main import *
 
 
-def setear_personaje(NavePrincipal):
+def setear_personaje(NavePrincipal):  # instancia la clase navePrincipal y la retorna
     personajePrincipal = NavePrincipal(NAVE["vida"], NAVE["daño"], NAVE["velocidad"],
                                        NAVE["velocidadTiro"], NAVE["imagen"], NAVE["imagen_disparo"], NAVE["imagen_corazon"], NAVE["imagen_corazon_vacio"], NAVE["x"], NAVE["y"], NAVE["modificador_h"], NAVE["vidas"])
     return personajePrincipal
 
 
+# instancia la clase enemiga con el enemigo 4, que es el primero que aparece
 def setear_personaje_enemigo(NaveEnemiga):
     coordenada_x = ANCHO_VENTANA + NAVES_E[4]["imagen"].get_width() + 20
     coordenada_y = randint(0, LARGO_VENTANA -
@@ -19,6 +19,7 @@ def setear_personaje_enemigo(NaveEnemiga):
     return enemigo
 
 
+# esta funcion se encarga de mover y dibujar los disparos ademas de comprobar la colision de cada uno con enemigos y personaje principal
 def manejar_disparos(pantalla, entorno, tiempo_actual):
     for item in entorno.lista_disparos:
         item.mover()
@@ -34,7 +35,7 @@ def manejar_disparos(pantalla, entorno, tiempo_actual):
                 except ValueError:
                     print("ahi fallo")
                 enemigo.restar_vida(entorno.personajePrincipal.daño)
-                enemigo.actualizar_rectangulo_vida(pantalla)
+                enemigo.actualizar_rectangulo_vida()
                 flag = False
                 if enemigo.vida < 1:
                     entorno.lista_enemigos.remove(enemigo)
@@ -60,6 +61,7 @@ def manejar_disparos(pantalla, entorno, tiempo_actual):
                 print("ahi fallo")
 
 
+# esta funcion usa los metodos de naveEnemiga para m,anejar los movimientos de los enemigos
 def manejar_moviimento_enemigos(lista_enemigos: list, pantalla):
     for item in lista_enemigos:
         item.generar_coordenadas(LARGO_VENTANA, ANCHO_VENTANA)
@@ -67,53 +69,19 @@ def manejar_moviimento_enemigos(lista_enemigos: list, pantalla):
         item.comprobar_coordenada()
 
 
+# se comprueba si el usuario toca tecla de arriba o abajo
 def manejar_teclas(pg, personajePrincipal):
     lista_teclas = pg.key.get_pressed()
     if True in lista_teclas:
         if lista_teclas[pg.K_UP]:
-            personajePrincipal.moverAriiba()
+            personajePrincipal.mover_arriba()
         if lista_teclas[pg.K_DOWN]:
-            personajePrincipal.moverAbajo(LARGO_VENTANA)
+            personajePrincipal.mover_abajo(LARGO_VENTANA)
 
 
+# se maneja el movimiento de pantalla
 def manejar_movimiento_pantalla(background, pantalla, x):
     x_relativa = x % background.get_rect().width
     pantalla.blit(background, (x_relativa - background.get_rect().width, 0))
     if x_relativa < ANCHO_VENTANA:
         pantalla.blit(background, (x_relativa, 0))
-    # x -= 10
-
-
-def resetear_juego(NavePrincipal, fuente, NaveEnemiga, Score, Contadores):
-    global puntaje
-    global lista_disparos
-    global lista_enemigos
-    global contadores
-    global personajePrincipal
-
-    personajePrincipal = NavePrincipal(NAVE["vida"], NAVE["daño"], NAVE["velocidad"],
-                                       NAVE["velocidadTiro"], NAVE["imagen"], NAVE["imagen_disparo"], NAVE["imagen_corazon"], NAVE["imagen_corazon_vacio"], NAVE["x"], NAVE["y"], NAVE["modificador_h"], NAVE["vidas"])
-    lista_disparos = []
-    lista_enemigos = []
-    puntaje.resetear_score(fuente)
-    contadores.resetear_contadores(
-        lista_disparos, personajePrincipal, lista_enemigos)
-
-    # background = pg.image.load("galaxian/images/background.jpg").convert()
-    # background = pg.transform.scale(background, (ANCHO_VENTANA, LARGO_VENTANA))
-
-    personajePrincipal = setear_personaje(NavePrincipal)
-    primer_enemigo = setear_personaje_enemigo(NaveEnemiga)
-    segundo_enemigo = setear_personaje_enemigo(NaveEnemiga)
-    tercer_enemigo = setear_personaje_enemigo(NaveEnemiga)
-
-    puntaje = Score(fuente)
-    contadores = Contadores(
-        lista_disparos, personajePrincipal, lista_enemigos)
-
-    lista_enemigos.append(primer_enemigo)
-    lista_enemigos.append(segundo_enemigo)
-    lista_enemigos.append(tercer_enemigo)
-
-    # segundos = 1
-    # medio_Segundos = 0.5
